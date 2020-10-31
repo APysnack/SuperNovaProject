@@ -9,10 +9,14 @@ function BotMissile(props){
     const [missileOpacity, setMissileOpacity] = useState(0);
     const [mLocation, setMLocation] = useState([50,20]);
     const [moving, setMoving] = useState(false);
+    const [missileHitSuccess, setMissileHitSuccess] = useState(false);
 
     // continues to check to see if the user has pressed any keys
     useEffect(() => {
-        checkFire();
+        if (!moving)
+        {
+            checkFire();
+        }
 
         // on an interval (defined by missile speed) calls the function to move the missile
         // and terminate the firing process
@@ -45,6 +49,11 @@ function BotMissile(props){
         props.botFinishFire();
     }
 
+    
+    const topShipHit = () => {
+        props.topShipHit();
+    }
+
     // in a sequence of functions activated when user hits the "f" key
     const fireMissile = () => {
 
@@ -52,10 +61,16 @@ function BotMissile(props){
         botFinishFire(); 
 
         // sets initialLoc to the coordinates of the ship's head
-        let initialLoc = [props.botHeadLoc[0], props.botHeadLoc[1] + 2]
+        let initialLoc = [props.botShipLoc[10][0], props.botShipLoc[10][1] + 2]
 
         // sets the missile location to the current head of the ship
         setMLocation(initialLoc);
+    }
+
+    const checkHit = (oppShipLoc) => {
+        if (oppShipLoc[0] == mLocation[0] && oppShipLoc[1] == mLocation[1]){
+            setMissileHitSuccess(true)
+        }
     }
 
     // checks the condition for ending fire
@@ -68,6 +83,17 @@ function BotMissile(props){
             setMLocation([0,0]);
             setMoving(false);
         }
+
+        props.topShipLoc.map(checkHit)
+
+        if (missileHitSuccess){
+            setMissileOpacity(0);
+            setMLocation([0,0]);
+            setMoving(false);
+            topShipHit();
+            setMissileHitSuccess(false);
+        }
+
     }
 
     // changes the position of the missile if "moving" is true
