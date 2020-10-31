@@ -6,11 +6,16 @@ import TopMissile from './TopMissile'
 import BotMissile from './BotMissile'
 
 function GameBoard(){
-
+    
     // returns true if the user is pressing a key (left arrow, right arrow, "f", etc.)
     const rightPressed = useKey("ArrowRight");
     const leftPressed = useKey("ArrowLeft");
     const firePressed = useKey("f");
+
+    // this can be changed, but the bottom ship is mapped to different keys than the top ship for now so they can both be operated with 1 keyboard
+    const pPressed = useKey("p");
+    const iPressed = useKey("i");
+    const oPressed = useKey("o");
 
     // state changes for the top ship/missile
     const [topDirection, setTopDirection] = useState('RIGHT'); 
@@ -26,7 +31,7 @@ function GameBoard(){
     useEffect(() => {
         checkPressTop();
         checkPressBot();
-    },[rightPressed, leftPressed, firePressed,]);
+    },[rightPressed, leftPressed, firePressed, pPressed, iPressed, oPressed,]);
 
     // initiates triggers for firing or movement
     const checkPressTop = () => {
@@ -54,13 +59,13 @@ function GameBoard(){
 
     // initiates triggers for firing or movement
     const checkPressBot = () => {
-        if (rightPressed){
+        if (pPressed){
             setBottomDirection('RIGHT');
         }
-        else if(leftPressed){
+        else if(iPressed){
             setBottomDirection('LEFT');
         }
-        if (firePressed){
+        if (oPressed){
             setBotMissileFire(true);
         }
     }
