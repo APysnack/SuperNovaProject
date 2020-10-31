@@ -1,6 +1,6 @@
 .game-area {
   position: relative;
-  margin: 50px auto;
+  margin: 20px auto;
   height: 396px;
   width: 596px;
   z-index: 0;
@@ -21,4 +21,8 @@
   height: 2%;
   background-color: red;
   z-index: 1;
+}
+
+.H1 {
+  background-color: brown;
 }

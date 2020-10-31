@@ -40,12 +40,12 @@ function TopShip(props){
 
     // checks to ensure the ship stays inside the game play area
     const checkBounds = () => {
-        if (shipLoc[0][0] <= 4) {
+        if (shipLoc[0][0] <= 6) {
             setActive(false);    
             setStuckLoc('LEFT');
             setDirection('STUCKLEFT');
         }
-        else if(shipLoc[1][0] >= 94){
+        else if(shipLoc[1][0] >= 92){
             setActive(false);    
             setStuckLoc('RIGHT');
             setDirection('STUCKRIGHT');
@@ -57,8 +57,8 @@ function TopShip(props){
     }
 
     // Gets the location of the top ship's head and passes to the parent component
-    const getTopHeadLoc = (currTopHeadLoc) => {
-        props.getTopHeadLoc(currTopHeadLoc);
+    const changeTopShipLoc = (currTopShipLoc) => {
+        props.changeTopShipLoc(currTopShipLoc);
     }
 
     // Sets the ship in a new direction
@@ -104,7 +104,7 @@ function TopShip(props){
         setShipLoc(location);
 
         // updates location of the ship's head forparent component (who passes info to missile)
-        getTopHeadLoc([shipLoc[10][0], shipLoc[10][1]]);
+        changeTopShipLoc(shipLoc);
 
         // ensures the ship is in the bounds of the game area
         checkBounds();

@@ -1,30 +1,21 @@
-import { useEffect } from 'react';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 
 // function for detecting user keyboard input
-function useKey(key){
-
-    var lastEvent;
-    var heldKeys = {};
-    
+function useKey(key) {
     const [pressed, setPressed] = useState(false)
-
     const match = event => key.toLowerCase() === event.key.toLowerCase()
 
     const onDown = event => {
-        if(match(event)) setPressed(true);
-    }
-
-    const onUp = event => {
-        if (match(event)) setPressed(false);
+        if (match(event)) {
+            setPressed(true);
+            setPressed(false);
+        }
     }
 
     useEffect(() => {
         window.addEventListener("keydown", onDown)
-        window.addEventListener("keyup", onUp)
         return () => {
-        window.removeEventListener("keydown", onDown)
-        window.removeEventListener("keyup", onUp)
+            window.removeEventListener("keydown", onDown)
         }
     }, [key])
 

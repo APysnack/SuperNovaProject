@@ -5,8 +5,8 @@ import useKey from './UseKey'
 import TopMissile from './TopMissile'
 import BotMissile from './BotMissile'
 
-function GameBoard(){
-    
+function GameBoard(props){
+
     // returns true if the user is pressing a key (left arrow, right arrow, "f", etc.)
     const rightPressed = useKey("ArrowRight");
     const leftPressed = useKey("ArrowLeft");
@@ -20,18 +20,21 @@ function GameBoard(){
     // state changes for the top ship/missile
     const [topDirection, setTopDirection] = useState('RIGHT'); 
     const [topMissileFire, setTopMissileFire] = useState(false);
-    const [topHeadLoc, setTopHeadLoc] = useState([0,0]);
+    const [topShipLoc, setTopShipLoc] = useState([0,0]);
+    const [topLives, setTopLives] = useState(3);
 
     // state changes for the bottom ship/missile
     const [bottomDirection, setBottomDirection] = useState('LEFT'); 
     const [botMissileFire, setBotMissileFire] = useState(false);
-    const [botHeadLoc, setBotHeadLoc] = useState([0,0]);
+    const [botShipLoc, setBotShipLoc] = useState([0,0]);
+    const [botLives, setBotLives] = useState(3);
 
     // when the user presses a key, checks the key they pressed and performs actions
     useEffect(() => {
         checkPressTop();
         checkPressBot();
-    },[rightPressed, leftPressed, firePressed, pPressed, iPressed, oPressed,]);
+        updateLives();
+    },[rightPressed, leftPressed, firePressed, pPressed, iPressed, oPressed,topLives,botLives]);
 
     // initiates triggers for firing or movement
     const checkPressTop = () => {
@@ -53,8 +56,17 @@ function GameBoard(){
     }
 
     // gets the location of the top ship's head for missile positioning
-    const getTopHeadLoc = (currTopHeadLoc) => {
-        setTopHeadLoc(currTopHeadLoc);
+    const changeTopShipLoc = (currTopShipLoc) => {
+        setTopShipLoc(currTopShipLoc);
+    }
+
+    
+    const topShipHit = () => {
+        setTopLives(prevTopLives => prevTopLives - 1);
+    }
+
+    const botShipHit = () => {
+        setBotLives(prevBotLives => prevBotLives - 1);
     }
 
     // initiates triggers for firing or movement
@@ -75,18 +87,29 @@ function GameBoard(){
         setBotMissileFire(false);
     }
 
+    const updateLives = (topNum, botNum) =>{
+        props.updateLives(topLives, botLives);
+    }
+
     // gets the location of the bottom ship's head for missile positioning
-    const getBotHeadLoc = (currBotHeadLoc) => {
-        setBotHeadLoc(currBotHeadLoc);
+    const changeBotShipLoc = (currBotShipLoc) => {
+        setBotShipLoc(currBotShipLoc);
     }
 
     // returns the game area to the calling component
     return(
         <div className = "game-area">
-                <BottomShip currDirection={bottomDirection} getBotHeadLoc={getBotHeadLoc}/>
-                <BotMissile botMissileFire={botMissileFire} botFinishFire={botFinishFire} botHeadLoc={botHeadLoc}/>
-                <TopShip currDirection={topDirection} getTopHeadLoc={getTopHeadLoc}/>
-                <TopMissile topMissileFire={topMissileFire} topFinishFire={topFinishFire} topHeadLoc={topHeadLoc}/>
+                <BottomShip currDirection={bottomDirection} changeBotShipLoc={changeBotShipLoc}/>
+               
+                <BotMissile botMissileFire={botMissileFire} botFinishFire={botFinishFire} 
+                            topShipLoc={topShipLoc} botShipLoc={botShipLoc}
+                            topShipHit={topShipHit}/>
+
+                <TopShip currDirection={topDirection} changeTopShipLoc={changeTopShipLoc}/>
+
+                <TopMissile topMissileFire={topMissileFire} topFinishFire={topFinishFire} 
+                            topShipLoc={topShipLoc} botShipLoc={botShipLoc}
+                            botShipHit={botShipHit}/>
         </div>
     )
 }

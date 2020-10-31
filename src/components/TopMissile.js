@@ -11,10 +11,14 @@ function TopMissile(props){
     const [missileOpacity, setMissileOpacity] = useState(0);
     const [mLocation, setMLocation] = useState([50,20]);
     const [moving, setMoving] = useState(false);
+    const [missileHitSuccess, setMissileHitSuccess] = useState(false);
 
     // continues to check to see if the user has hit the "f" key
     useEffect(() => {
-        checkFire();
+            if (!moving)
+            {
+                checkFire();
+            }
         
         // moves the missile at an interval defined by the speed
         const interval = setInterval(() => {
@@ -25,22 +29,29 @@ function TopMissile(props){
 
     },);
 
-    // when user selects the "f" key, sets missile visible and begins movement
+    // checks to see if the trigger for the missile has been activated
     const checkFire = () => {
-        // if user has selected the space bar
+        // if user has selected the "f" key
         if (props.topMissileFire === true){
+
+            // sets the missile's status to "moving"
             setMoving(true);
 
-            if(moving){
-                setMissileOpacity(1);
-                fireMissile();
-            }
+            // makes the missile visible
+            setMissileOpacity(1);
+
+            // calls the function to fire missile
+            fireMissile();
         }
     }
 
     // calls the parent to set topMissileFire to false 
     const topFinishFire = () => {
         props.topFinishFire();
+    }
+
+    const botShipHit = () => {
+        props.botShipHit();
     }
 
     // activates when user hits the "f" key
@@ -50,13 +61,17 @@ function TopMissile(props){
         topFinishFire(); 
 
         // sets initialLoc to the coordinates of the ship's head
-        let initialLoc = [props.topHeadLoc[0], props.topHeadLoc[1] + 2]
+        let initialLoc = [props.topShipLoc[10][0], props.topShipLoc[10][1] + 2]
 
         // sets the missile location to the current head of the ship
         setMLocation(initialLoc);
+    }
 
-        // makes the missile visible to the user
-        setMissileOpacity(1);
+    // checks each pixel of opponent ship to see if it matches missile coords
+    const checkHit = (oppShipLoc) => {
+        if (oppShipLoc[0] == mLocation[0] && oppShipLoc[1] == mLocation[1]){
+            setMissileHitSuccess(true)
+        }
     }
 
     // checks conditions for ending the firing trigger
@@ -67,6 +82,16 @@ function TopMissile(props){
             setMissileOpacity(0);
             setMLocation([0,0]);
             setMoving(false);
+        }
+
+        props.botShipLoc.map(checkHit)
+
+        if (missileHitSuccess){
+            setMissileOpacity(0);
+            setMLocation([0,0]);
+            setMoving(false);
+            botShipHit();
+            setMissileHitSuccess(false);
         }
     }
 

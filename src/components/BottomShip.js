@@ -39,12 +39,12 @@ function BottomShip(props){
 
     // checks to ensure the ship is within the game area
     const checkBounds = () => {
-        if (shipLoc[0][0] <= 4) {
+        if (shipLoc[0][0] <= 6) {
             setActive(false);    
             setStuckLoc('LEFT');
             setDirection('STUCKLEFT');
         }
-        else if(shipLoc[1][0] >= 94){
+        else if(shipLoc[1][0] >= 92){
             setActive(false);    
             setStuckLoc('RIGHT');
             setDirection('STUCKRIGHT');
@@ -56,8 +56,8 @@ function BottomShip(props){
     }
 
     // tracks the current location of the ships head and passes to the parent
-    const getBotHeadLoc = (currBotHeadLoc) => {
-        props.getBotHeadLoc(currBotHeadLoc);
+    const changeBotShipLoc = (currBotHeadLoc) => {
+        props.changeBotShipLoc(currBotHeadLoc);
     }
 
     // changes the direction of the ship 
@@ -100,7 +100,7 @@ function BottomShip(props){
         }
 
         setShipLoc(location);
-        getBotHeadLoc([shipLoc[10][0], shipLoc[10][1]]);
+        changeBotShipLoc(shipLoc);
         checkBounds();
     }
 
