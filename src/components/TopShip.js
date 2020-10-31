@@ -36,7 +36,7 @@ function TopShip(props){
         }, speed);
         return () => clearInterval(interval);
 
-    },);
+    },[shipLoc, active]);
 
     // checks to ensure the ship stays inside the game play area
     const checkBounds = () => {

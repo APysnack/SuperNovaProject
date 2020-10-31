@@ -35,7 +35,7 @@ function BottomShip(props){
         }, speed);
         return () => clearInterval(interval);
 
-    },);
+    },[shipLoc, active]);
 
     // checks to ensure the ship is within the game area
     const checkBounds = () => {
